@@ -5,7 +5,7 @@
 #include "environment.h"
 #include "point.h"
 #include "agent.h"
-
+#include <cstdlib>
 #define START_X 0
 #define START_Y 3
 #define TERMINAL_X 7	
@@ -26,6 +26,5 @@ int main()
 	en.setWind(7,2);
 	en.setWind(8,1);
 	Agent myAgent(&en);
-	
-
+	myAgent.training();
 }

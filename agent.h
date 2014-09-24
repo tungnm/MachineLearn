@@ -33,10 +33,10 @@ public:
 	//~Agent();
 	void training();
 	void runEpisode();
-	void updateStateValue();
-	Action chooseAction(Policy p);
-	Point makeAction(Action a);
-	bool isMovable(Action a);
+	void updateStateValue(Point currentState, Action a, Point nextState);
+	Action chooseAction(Policy p, Point currentState, Point nextState);
+	Point makeAction(Action a, Point currentState);
+	bool isMovable(Action a, Point currentState);
 };
 
 #endif

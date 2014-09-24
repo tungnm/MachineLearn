@@ -25,8 +25,8 @@ public:
 		std::cout <<"hello";
 		terminal = false;
 		value = 0;
+		attribute = 0;
 	}
-
 	void setAttribute(int a)
 	{
 		attribute = a;
@@ -54,6 +54,10 @@ public:
 	double getReward()
 	{
 		return reward;
+	}
+	double getAttribute()
+	{
+		return attribute;
 	}
 };
 #endif

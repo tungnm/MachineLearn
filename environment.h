@@ -11,6 +11,7 @@
 
 using namespace std;
 
+class Agent;
 class Environment
 {
 public:
@@ -20,7 +21,7 @@ public:
 private:
 	//the map of the environment
 	Cell** map;
-
+	friend class Agent;
 public:
 	//constructor
 	Environment(Point start, Point terminal);
