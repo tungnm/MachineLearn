@@ -1,7 +1,7 @@
 #ifndef AGENT_H
 #define AGENT_H
 #define ALPHA 0.5
-#define GAMMA 0.9
+#define GAMMA 1
 #define EPSILON 0.1
 #define MAX_EPISODE 1000
 #include <vector>

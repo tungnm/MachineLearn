@@ -22,7 +22,7 @@ public:
 	//constructor
 	Cell()
 	{
-		std::cout <<"hello";
+/*		std::cout <<"hello";*/
 		terminal = false;
 		value = 0;
 		attribute = 0;

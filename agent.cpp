@@ -29,6 +29,8 @@ Agent::Agent(Environment *envi)
  */
 void Agent::training()
 {
+	cout << "Beginning state: " << endl;
+	en->printAllMapValue();
 	while(episode <= MAX_EPISODE)
 	{
 		episode++;
@@ -36,13 +38,14 @@ void Agent::training()
 	}
 }
 
-/*
+/* 
  * run a single episode
  */
 void Agent::runEpisode()
 {
 	Point nextState;
 	Point currentState = en->ss;
+	int actionTook = 0;
 	bool isFinish = false;
 	double reward;
 	while(isFinish == false)
@@ -54,8 +57,11 @@ void Agent::runEpisode()
 		}
 		nextState = makeAction(currentAction, currentState);
 		updateStateValue(currentState, currentAction, nextState);
+		actionTook++;
+		cout << "Action num: " << actionTook <<". Action: " << currentAction << endl;
+		en->printAllMapValue();
+		cout << "Current position: " << currentState.x<< "," << currentState.y << " next position : " << nextState.x <<","<< nextState.y << endl;	
 		currentState = nextState;
-		//nextState = makeAction(currentAction);
 	}
 }
 
@@ -160,19 +166,63 @@ Point Agent::makeAction(Action a, Point currentState)
 	}
 	else if(a == EAST)
 	{
-		int newX = currentState.x + 1;
-		int newY =  currentState.y + wind;//ambiguous
+		int newY;
+		int newX ;
+		if(currentState.x + 1 >= MAP_WIDTH-1)
+		{
+			newX = MAP_WIDTH-1;
+		}
+		else
+		{
+			newX = currentState.x + 1;
+		}
+		if(currentState.y + wind >= MAP_HEIGHT-1)
+		{
+			newY = MAP_HEIGHT-1;
+		}
+		else
+		{
+			newY =  currentState.y + wind;
+		}
 		return Point(newX, newY);
 	}
 	else if(a == SOUTH)
 	{
-		int newY = currentState.y -1 + wind;
+		int newY;
+		if(currentState.y -1 + wind <= 0)
+		{
+			newY = 0;
+		}
+		else if(currentState.y -1 + wind >= MAP_HEIGHT-1)
+		{
+			newY = MAP_HEIGHT-1;
+		}
+		else
+		{
+			newY = currentState.y -1 + wind;
+		}
 		return Point(currentState.x, newY);
 	}
 	else 
 	{
-		int newX = currentState.x -1;
-		int newY = currentState.y + wind;//ambiguous
+		int newX;
+		if(currentState.x -1 <= 0)
+		{
+			newX = 0;
+		}
+		else
+		{
+			newX = currentState.x -1;
+		}
+		int newY;
+		if(currentState.y + wind >= MAP_HEIGHT-1)
+		{
+			newY = MAP_HEIGHT-1;
+		}
+		else
+		{
+			newY = currentState.y + wind;
+		}
 		return Point(newX, newY);
 	}
 }

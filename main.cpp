@@ -14,9 +14,9 @@ using namespace std;
 
 //goal is to get from the start state to terminal state with as small as possible
 
-
 int main()
 {
+    srand((int)time(NULL));
 	int check = 3;
 	Environment en(Point(START_X, START_Y),Point(TERMINAL_X,TERMINAL_Y));
 	en.setWind(3,1);

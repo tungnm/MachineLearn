@@ -26,6 +26,6 @@ public:
 	//constructor
 	Environment(Point start, Point terminal);
 	void setWind(int col, int level);
-
+	void printAllMapValue();
 };
 #endif
