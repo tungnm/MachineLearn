@@ -2,8 +2,10 @@
 #define ENVIRONMENT_H
 
 //starting with a simple map
-#define MAP_WIDTH 10
-#define MAP_HEIGHT 7
+//todo: make this attributes of Environment class instead of
+//define
+#define MAP_WIDTH 10 
+#define MAP_HEIGHT 7 
 
 #include <iostream>
 #include "cell.h"
@@ -27,5 +29,11 @@ public:
 	Environment(Point start, Point terminal);
 	void setWind(int col, int level);
 	void printAllMapValue();
+
+    //accessor to cell map
+    Cell** getCellMap()
+    {
+        return map; 
+    }
 };
 #endif
