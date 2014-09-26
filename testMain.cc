@@ -3,12 +3,21 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "environment.h"
+#include <vector>
+#include "threading/ThreadUtil.h"
 //todo: eventually put this in a renderer class or something
 float g_ratio;
 int g_width, g_height;
 GLFWwindow* window;
 float mCellSize;
 Environment* mEnvironment;
+struct DrawingPath
+{
+    int mCurrentPathIndex;
+    std::vector<Point> mPath;
+};
+
+DrawingPath mCurrentDrawingPath;
 static void error_callback(int error, const char* description)
 {
     fputs(description, stderr);
@@ -40,6 +49,7 @@ void drawSquare(float x, float y, float scaleX, float scaleY)
 }
 void drawEnvironment(Environment* env)
 {
+   glColor3f(1.f, 1.f, 1.f);
    for(int i = 0; i < MAP_WIDTH; i++)
    {
         for(int j = 0; j < MAP_HEIGHT; j++)
@@ -54,15 +64,43 @@ void drawEnvironment(Environment* env)
         }
    }
 }
+void drawCell(int i, int j)
+{
+    drawSquare(
+            -1.0 + j * mCellSize, 
+            1.0 - mCellSize - i * mCellSize,
+            mCellSize,
+            mCellSize); 
 
+}
+void drawPath(DrawingPath path)
+{
+    glColor3f(1.f, 0.f, 0.f);
+    //draw from the beginning to current index   
+    for(int i = 0; i < path.mCurrentPathIndex; i++)
+    {
+        drawCell(path.mPath[i].x,path.mPath[i].y);
+    }
+}
 void mainLoop()
 {
     while (!glfwWindowShouldClose(window))
     {
         glClear(GL_COLOR_BUFFER_BIT);
         drawEnvironment(mEnvironment);
-  //  drawSquare(-1,0,0.5,0.5);
+
+        drawPath(mCurrentDrawingPath);
         glfwSwapBuffers(window);
+            //update code:
+        if (mCurrentDrawingPath.mCurrentPathIndex < mCurrentDrawingPath.mPath.size())
+        mCurrentDrawingPath.mCurrentPathIndex++;
+        //sleep for a while here
+        mud::ThreadUtil::sleep(1000);
+        if (mCurrentDrawingPath.mCurrentPathIndex == mCurrentDrawingPath.mPath.size())
+        {
+            //done drawing this path, maybe sleep for another while
+
+        }
         glfwPollEvents();
     }
 
@@ -103,7 +141,23 @@ void init()
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glOrtho(0, 0, -1.f, 1.f, 1.f, -1.f);
-
+    //test patj
+    Point p(0,1);
+    Point p1(1,1);
+    Point p2(1,2);
+    Point p3(2,2);
+    Point p4(2,3);
+    Point p5(2,4);
+    Point p6(2,5);
+    mCurrentDrawingPath.mCurrentPathIndex = 0;
+    mCurrentDrawingPath.mPath.push_back(p);
+    mCurrentDrawingPath.mPath.push_back(p1);
+    mCurrentDrawingPath.mPath.push_back(p2);
+    mCurrentDrawingPath.mPath.push_back(p2);
+    mCurrentDrawingPath.mPath.push_back(p3);
+    mCurrentDrawingPath.mPath.push_back(p4);
+    mCurrentDrawingPath.mPath.push_back(p5);
+    mCurrentDrawingPath.mPath.push_back(p6);
 }
 void deinit()
 {

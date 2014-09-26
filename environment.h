@@ -4,8 +4,8 @@
 //starting with a simple map
 //todo: make this attributes of Environment class instead of
 //define
-#define MAP_WIDTH 10 
-#define MAP_HEIGHT 7 
+#define MAP_WIDTH 12 
+#define MAP_HEIGHT 5 
 
 #include <iostream>
 #include "cell.h"
