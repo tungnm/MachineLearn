@@ -17,5 +17,5 @@ set (MUD_SOURCE
     ThirdPartyLibs/MUD/base/unix/SharedUnixTimeVal.cpp
     ThirdPartyLibs/AmazonCompositeResult/SimpleResultCodes.cpp
     )
-add_executable (test1 testMain.cc ${MUD_SOURCE})
+add_executable (test1 testMain.cc renderer.cpp ${MUD_SOURCE})
 target_link_libraries(test1 glfw ${GLFW_LIBRARIES})
