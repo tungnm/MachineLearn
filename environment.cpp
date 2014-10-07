@@ -44,11 +44,14 @@ void Environment::printAllMapValue()
 	{
 		for(int i = 0; i < MAP_WIDTH; i++)
 		{
-			cout << std::fixed;
-			cout << std::setprecision(2) << map[i][j].getStateValue() << "    ";
-			if(i == MAP_WIDTH -1)
+			for(int k = 0; k < 5; k++)
 			{
-				cout << "\n";
+				cout << std::fixed;
+				cout << std::setprecision(2) << map[i][j].getActionValue(k) << " ";
+				if(i == MAP_WIDTH -1 && k == 4)
+				{
+					cout << "\n";
+				}
 			}
 		}
 	}

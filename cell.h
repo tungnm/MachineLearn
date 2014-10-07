@@ -6,7 +6,7 @@ class Cell
 {
 private:
 	//state value
-	double value;
+	double value[4];
 	
 	//is Terminal
 	bool terminal;
@@ -24,20 +24,29 @@ public:
 	{
 /*		std::cout <<"hello";*/
 		terminal = false;
-		value = 0;
+		for(int i = 0; i <= 4/*hardcode*/; i++)
+		{
+			value[i] = 0;			
+		}
 		attribute = 0;
 	}
+	/*
+	 * set an attribute
+	 */
 	void setAttribute(int a)
 	{
 		attribute = a;
-	}	
+	}
+	/*
+	 * set the state to be a terminal value
+	 */
 	void setTerminal()
 	{
 		terminal = true;
 	}
-	void setStateValue(double v)
+	void setActionValue(double v, int actionId)
 	{
-		value = v;
+		value[actionId] = v;
 	}
 	void setReward(double r)
 	{
@@ -47,9 +56,9 @@ public:
 	{
 		return terminal;
 	}
-	double getStateValue()
+	double getActionValue(int actionId)
 	{
-		return value;
+		return value[actionId];
 	}
 	double getReward()
 	{

@@ -14,6 +14,11 @@ using namespace std;
 
 //goal is to get from the start state to terminal state with as small as possible
 
+/* temporary compilation
+g++ -g -gdwarf-2 -O0 point.h cell.h environment.h environment.cpp agent.h agent.cpp main.cpp 
+*/
+
+
 int main()
 {
     srand((int)time(NULL));

@@ -4,6 +4,7 @@
 #include "environment.h"
 #include "point.h"
 #include <cstdlib>
+#define SENTINEL -999
 using namespace std;
 
 //contructors
@@ -33,6 +34,7 @@ void Agent::training()
 	en->printAllMapValue();
 	while(episode <= MAX_EPISODE)
 	{
+		path.clear();
 		episode++;
 		runEpisode();
 	}
@@ -47,7 +49,6 @@ void Agent::runEpisode()
 	Point currentState = en->ss;
 	int actionTook = 0;
 	bool isFinish = false;
-	double reward;
 	while(isFinish == false)
 	{
 		Action currentAction = chooseAction(p, currentState, nextState);
@@ -56,6 +57,7 @@ void Agent::runEpisode()
 			isFinish = true;
 		}
 		nextState = makeAction(currentAction, currentState);
+		path.push_back(nextState);
 		updateStateValue(currentState, currentAction, nextState);
 		actionTook++;
 		cout << "Action num: " << actionTook <<". Action: " << currentAction << endl;
@@ -71,9 +73,27 @@ void Agent::runEpisode()
 void Agent::updateStateValue(Point currentState, Action a, Point nextState)
 {
 	double newValue;
-	double currentValue = en->map[currentState.x][currentState.y].getStateValue();
-	double nextValue = en->map[nextState.x][nextState.y].getStateValue();
-
+	double currentValue = en->map[currentState.x][currentState.y].getActionValue(a);
+	double nextValue;
+	double tempValue = SENTINEL;
+	if(en->map[nextState.x][nextState.y].isTerminal() == true)
+	{
+		nextValue = 10;
+	}
+	else
+	{
+		for(int i = 0; i < 4; i++)
+		{
+			if(isMovable(Action(i),nextState))
+			{
+				tempValue = en->map[nextState.x][nextState.y].getActionValue(i);
+				if(nextValue == SENTINEL || nextValue < tempValue)
+				{
+					nextValue = tempValue;
+				}
+			}
+		}
+	}
 	double reward;
 	if(a == EXIT)
 	{
@@ -84,7 +104,7 @@ void Agent::updateStateValue(Point currentState, Action a, Point nextState)
 		reward = -1;
 	}
 	newValue = currentValue*(1-alpha) + alpha*(reward + gamma * nextValue);
-	en->map[currentState.x][currentState.y].setStateValue(newValue);
+	en->map[currentState.x][currentState.y].setActionValue(newValue,a);
 }
 
 
@@ -104,7 +124,7 @@ Action Agent::chooseAction(Policy p, Point currentState, Point nextState)
 		double random = ((double) rand() / (RAND_MAX));
 		Action nextAction;
 
-		// randomly choose the next move
+		// randomly choose the next move -> exploration
 		if(random <= EPSILON)
 		{
 			while(true)
@@ -116,31 +136,30 @@ Action Agent::chooseAction(Policy p, Point currentState, Point nextState)
 				}
 			}
 		}
-		else//choose move based on the values of next states
+		else//choose move based on the values of next state actions -> exploitation
 		{
 			//4 is the number of possible action, excluding EXIT
-			std::vector<double> nextStateBestValues;
-			std::vector<Action> nextStateBestAction;
+			std::vector<double> nextActionBestValue;
+			std::vector<Action> bestActions;
 			for(int i = 0; i < 4; i++)
 			{
 				if(isMovable(Action(i), currentState) == true)
 				{
-					Point tempState = makeAction(Action(i), currentState);
-					if(nextStateBestValues.empty() == true || nextStateBestValues[0] < en->map[tempState.x][tempState.y].getStateValue())
+					if(nextActionBestValue.empty() == true || nextActionBestValue[0] < en->map[currentState.x][currentState.y].getActionValue(i))
 					{
-						nextStateBestValues.clear();
-						nextStateBestValues.push_back(en->map[tempState.x][tempState.y].getStateValue());
-						nextStateBestAction.clear();
-						nextStateBestAction.push_back(Action(i));
+						nextActionBestValue.clear();
+						nextActionBestValue.push_back(en->map[currentState.x][currentState.y].getActionValue(i));
+						bestActions.clear();
+						bestActions.push_back(Action(i));
 					}
-					else if(nextStateBestValues[0] == en->map[currentState.x][currentState.y].getStateValue())
+					else if(nextActionBestValue[0] == en->map[currentState.x][currentState.y].getActionValue(i))
 					{
-						nextStateBestAction.push_back(Action(i));
+						bestActions.push_back(Action(i));
 					}
 				}
 			}
-			int choosen = rand()%(nextStateBestAction.size());
-			return nextStateBestAction[choosen];
+			int choosen = rand()%(bestActions.size());
+			return bestActions[choosen];
 		}
 	}
 }
