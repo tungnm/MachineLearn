@@ -9,7 +9,7 @@ int main(void)
     //start eventloop(update) thread
     renderer1.startEventLoop();
     
-    _sleep(2000);
+//    _sleep(2000);
 
     //test path
     Point p;
@@ -30,7 +30,7 @@ int main(void)
     path1.push_back(p);  
     renderer1.addPath(path1);
 
-    _sleep(5000);
+ //   _sleep(5000);
     path1.clear();
     p.x = 3; p.y = 3;
     path1.push_back(p);
