@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/Users/tungnguyen/code/MachineLearn/ThirdPartyLibs/glfw/tests/tearing.c
+/home/son/glfw-3.0.4/tests/tearing.c
 GLFW/glfw3.h
 -
 stdio.h
@@ -16,7 +16,7 @@ stdlib.h
 math.h
 -
 
-ThirdPartyLibs/glfw/include/GLFW/glfw3.h
+include/GLFW/glfw3.h
 stddef.h
 -
 OpenGL/gl3.h
@@ -32,8 +32,6 @@ GLES/gl.h
 GLES2/gl2.h
 -
 GLES3/gl3.h
--
-GLES3/gl31.h
 -
 GL/gl.h
 -

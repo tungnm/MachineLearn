@@ -1,5 +1,5 @@
 //========================================================================
-// GLFW 3.1 - www.glfw.org
+// GLFW 3.0 - www.glfw.org
 //------------------------------------------------------------------------
 // Copyright (c) 2010 Camilla Berglund <elmindreda@elmindreda.org>
 //
@@ -35,46 +35,44 @@
 //========================================================================
 
 // Define this to 1 if building GLFW for X11
-/* #undef _GLFW_X11 */
+#define _GLFW_X11
 // Define this to 1 if building GLFW for Win32
 /* #undef _GLFW_WIN32 */
 // Define this to 1 if building GLFW for Cocoa
-#define _GLFW_COCOA
-// Define this to 1 if building GLFW for Wayland
-/* #undef _GLFW_WAYLAND */
+/* #undef _GLFW_COCOA */
 
 // Define this to 1 if building GLFW for EGL
 /* #undef _GLFW_EGL */
 // Define this to 1 if building GLFW for GLX
-/* #undef _GLFW_GLX */
+#define _GLFW_GLX
 // Define this to 1 if building GLFW for WGL
 /* #undef _GLFW_WGL */
 // Define this to 1 if building GLFW for NSGL
-#define _GLFW_NSGL
+/* #undef _GLFW_NSGL */
 
 // Define this to 1 if building as a shared library / dynamic library / DLL
 /* #undef _GLFW_BUILD_DLL */
 
+// Define this to 1 to disable dynamic loading of winmm
+/* #undef _GLFW_NO_DLOAD_WINMM */
 // Define this to 1 if glfwSwapInterval should ignore DWM compositing status
 /* #undef _GLFW_USE_DWM_SWAP_INTERVAL */
 // Define this to 1 to force use of high-performance GPU on Optimus systems
 /* #undef _GLFW_USE_OPTIMUS_HPG */
 
 // Define this to 1 if glXGetProcAddress is available
-/* #undef _GLFW_HAS_GLXGETPROCADDRESS */
+#define _GLFW_HAS_GLXGETPROCADDRESS
 // Define this to 1 if glXGetProcAddressARB is available
-/* #undef _GLFW_HAS_GLXGETPROCADDRESSARB */
+#define _GLFW_HAS_GLXGETPROCADDRESSARB
 // Define this to 1 if glXGetProcAddressEXT is available
 /* #undef _GLFW_HAS_GLXGETPROCADDRESSEXT */
 // Define this to 1 if dlopen is available
 /* #undef _GLFW_HAS_DLOPEN */
 
 // Define this to 1 if glfwInit should change the current directory
-#define _GLFW_USE_CHDIR
+/* #undef _GLFW_USE_CHDIR */
 // Define this to 1 if glfwCreateWindow should populate the menu bar
-#define _GLFW_USE_MENUBAR
-// Define this to 1 if windows should use full resolution on Retina displays
-#define _GLFW_USE_RETINA
+/* #undef _GLFW_USE_MENUBAR */
 
 // Define this to 1 if using OpenGL as the client library
 #define _GLFW_USE_OPENGL

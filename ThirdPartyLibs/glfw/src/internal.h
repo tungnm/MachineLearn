@@ -1,5 +1,5 @@
 //========================================================================
-// GLFW 3.1 - www.glfw.org
+// GLFW 3.0 - www.glfw.org
 //------------------------------------------------------------------------
 // Copyright (c) 2002-2006 Marcus Geelnard
 // Copyright (c) 2006-2010 Camilla Berglund <elmindreda@elmindreda.org>
@@ -33,7 +33,7 @@
  #include "glfw_config.h"
 #endif
 
-#define _GLFW_VERSION_NUMBER "3.1.0"
+#define _GLFW_VERSION_NUMBER "3.0.4"
 
 #if defined(_GLFW_USE_OPENGL)
  // This is the default for glfw3.h
@@ -58,13 +58,12 @@
  #include "../deps/GL/glext.h"
 #endif
 
+typedef struct _GLFWhints       _GLFWhints;
 typedef struct _GLFWwndconfig   _GLFWwndconfig;
-typedef struct _GLFWctxconfig   _GLFWctxconfig;
 typedef struct _GLFWfbconfig    _GLFWfbconfig;
 typedef struct _GLFWwindow      _GLFWwindow;
 typedef struct _GLFWlibrary     _GLFWlibrary;
 typedef struct _GLFWmonitor     _GLFWmonitor;
-typedef struct _GLFWcursor      _GLFWcursor;
 
 #if defined(_GLFW_COCOA)
  #include "cocoa_platform.h"
@@ -72,8 +71,6 @@ typedef struct _GLFWcursor      _GLFWcursor;
  #include "win32_platform.h"
 #elif defined(_GLFW_X11)
  #include "x11_platform.h"
-#elif defined(_GLFW_WAYLAND)
- #include "wl_platform.h"
 #else
  #error "No supported window creation API selected"
 #endif
@@ -135,14 +132,14 @@ typedef struct _GLFWcursor      _GLFWcursor;
 
 
 //========================================================================
-// Platform-independent structures
+// Internal types
 //========================================================================
 
-/*! @brief Window configuration.
+/*! @brief Window and context configuration.
  *
- *  Parameters relating to the creation of the window but not directly related
- *  to the framebuffer.  This is used to pass window creation parameters from
- *  shared code to the platform API.
+ *  Parameters relating to the creation of the context and window but not
+ *  directly related to the framebuffer.  This is used to pass window and
+ *  context creation parameters from shared code to the platform API.
  */
 struct _GLFWwndconfig
 {
@@ -152,29 +149,14 @@ struct _GLFWwndconfig
     GLboolean     resizable;
     GLboolean     visible;
     GLboolean     decorated;
-    GLboolean     focused;
-    GLboolean     autoIconify;
-    GLboolean     floating;
+    int           clientAPI;
+    int           glMajor;
+    int           glMinor;
+    GLboolean     glForward;
+    GLboolean     glDebug;
+    int           glProfile;
+    int           glRobustness;
     _GLFWmonitor* monitor;
-};
-
-
-/*! @brief Context configuration.
- *
- *  Parameters relating to the creation of the context but not directly related
- *  to the framebuffer.  This is used to pass context creation parameters from
- *  shared code to the platform API.
- */
-struct _GLFWctxconfig
-{
-    int           api;
-    int           major;
-    int           minor;
-    GLboolean     forward;
-    GLboolean     debug;
-    int           profile;
-    int           robustness;
-    int           release;
     _GLFWwindow*  share;
 };
 
@@ -200,12 +182,11 @@ struct _GLFWfbconfig
     int         accumBlueBits;
     int         accumAlphaBits;
     int         auxBuffers;
-    int         stereo;
+    GLboolean   stereo;
     int         samples;
-    int         sRGB;
-    int         doublebuffer;
+    GLboolean   sRGB;
 
-    // This is defined in the context API's context.h
+    // This is defined in the context API's platform.h
     _GLFW_PLATFORM_FBCONFIG;
 };
 
@@ -220,33 +201,26 @@ struct _GLFWwindow
     GLboolean           iconified;
     GLboolean           resizable;
     GLboolean           decorated;
-    GLboolean           autoIconify;
-    GLboolean           floating;
     GLboolean           visible;
     GLboolean           closed;
     void*               userPointer;
     GLFWvidmode         videoMode;
     _GLFWmonitor*       monitor;
-    _GLFWcursor*        cursor;
 
     // Window input state
     GLboolean           stickyKeys;
     GLboolean           stickyMouseButtons;
     double              cursorPosX, cursorPosY;
     int                 cursorMode;
-    char                mouseButtons[GLFW_MOUSE_BUTTON_LAST + 1];
-    char                keys[GLFW_KEY_LAST + 1];
+    char                mouseButton[GLFW_MOUSE_BUTTON_LAST + 1];
+    char                key[GLFW_KEY_LAST + 1];
 
     // OpenGL extensions and context attributes
-    struct {
-        int             api;
-        int             major, minor, revision;
-        GLboolean       forward, debug;
-        int             profile;
-        int             robustness;
-        int             release;
-    } context;
-
+    int                 clientAPI;
+    int                 glMajor, glMinor, glRevision;
+    GLboolean           glForward, glDebug;
+    int                 glProfile;
+    int                 glRobustness;
 #if defined(_GLFW_USE_OPENGL)
     PFNGLGETSTRINGIPROC GetStringi;
 #endif
@@ -265,13 +239,11 @@ struct _GLFWwindow
         GLFWscrollfun           scroll;
         GLFWkeyfun              key;
         GLFWcharfun             character;
-        GLFWcharmodsfun         charmods;
-        GLFWdropfun             drop;
     } callbacks;
 
     // This is defined in the window API's platform.h
     _GLFW_PLATFORM_WINDOW_STATE;
-    // This is defined in the context API's context.h
+    // This is defined in the context API's platform.h
     _GLFW_PLATFORM_CONTEXT_STATE;
 };
 
@@ -297,16 +269,6 @@ struct _GLFWmonitor
 };
 
 
-/*! @brief Cursor structure
- */
-struct _GLFWcursor
-{
-    _GLFWcursor*    next;
-
-    // This is defined in the window API's platform.h
-    _GLFW_PLATFORM_CURSOR_STATE;
-};
-
 /*! @brief Library global data.
  */
 struct _GLFWlibrary
@@ -323,30 +285,23 @@ struct _GLFWlibrary
         int         accumBlueBits;
         int         accumAlphaBits;
         int         auxBuffers;
-        int         stereo;
-        int         resizable;
-        int         visible;
-        int         decorated;
-        int         focused;
-        int         autoIconify;
-        int         floating;
+        GLboolean   stereo;
+        GLboolean   resizable;
+        GLboolean   visible;
+        GLboolean   decorated;
         int         samples;
-        int         sRGB;
+        GLboolean   sRGB;
         int         refreshRate;
-        int         doublebuffer;
-        int         api;
-        int         major;
-        int         minor;
-        int         forward;
-        int         debug;
-        int         profile;
-        int         robustness;
-        int         release;
+        int         clientAPI;
+        int         glMajor;
+        int         glMinor;
+        GLboolean   glForward;
+        GLboolean   glDebug;
+        int         glProfile;
+        int         glRobustness;
     } hints;
 
     double          cursorPosX, cursorPosY;
-
-    _GLFWcursor*    cursorListHead;
 
     _GLFWwindow*    windowListHead;
     _GLFWwindow*    focusedWindow;
@@ -360,14 +315,8 @@ struct _GLFWlibrary
 
     // This is defined in the window API's platform.h
     _GLFW_PLATFORM_LIBRARY_WINDOW_STATE;
-    // This is defined in the context API's context.h
-    _GLFW_PLATFORM_LIBRARY_CONTEXT_STATE;
-    // This is defined in the platform's time.h
-    _GLFW_PLATFORM_LIBRARY_TIME_STATE;
-    // This is defined in the platform's joystick.h
-    _GLFW_PLATFORM_LIBRARY_JOYSTICK_STATE;
-    // This is defined in the platform's tls.h
-    _GLFW_PLATFORM_LIBRARY_TLS_STATE;
+    // This is defined in the context API's platform.h
+    _GLFW_PLATFORM_LIBRARY_OPENGL_STATE;
 };
 
 
@@ -415,11 +364,12 @@ const char* _glfwPlatformGetVersionString(void);
  */
 void _glfwPlatformSetCursorPos(_GLFWwindow* window, double xpos, double ypos);
 
-/*! @brief Applies the cursor mode of the specified window to the system.
- *  @param[in] window The window whose cursor mode to apply.
+/*! @brief Sets up the specified cursor mode for the specified window.
+ *  @param[in] window The window whose cursor mode to change.
+ *  @param[in] mode The desired cursor mode.
  *  @ingroup platform
  */
-void _glfwPlatformApplyCursorMode(_GLFWwindow* window);
+void _glfwPlatformSetCursorMode(_GLFWwindow* window, int mode);
 
 /*! @copydoc glfwGetMonitors
  *  @ingroup platform
@@ -507,7 +457,6 @@ void _glfwPlatformSetTime(double time);
  */
 int _glfwPlatformCreateWindow(_GLFWwindow* window,
                               const _GLFWwndconfig* wndconfig,
-                              const _GLFWctxconfig* ctxconfig,
                               const _GLFWfbconfig* fbconfig);
 
 /*! @ingroup platform
@@ -544,11 +493,6 @@ void _glfwPlatformSetWindowSize(_GLFWwindow* window, int width, int height);
  */
 void _glfwPlatformGetFramebufferSize(_GLFWwindow* window, int* width, int* height);
 
-/*! @copydoc glfwGetWindowFrameSize
- *  @ingroup platform
- */
-void _glfwPlatformGetWindowFrameSize(_GLFWwindow* window, int* left, int* top, int* right, int* bottom);
-
 /*! @copydoc glfwIconifyWindow
  *  @ingroup platform
  */
@@ -564,10 +508,6 @@ void _glfwPlatformRestoreWindow(_GLFWwindow* window);
  */
 void _glfwPlatformShowWindow(_GLFWwindow* window);
 
-/*! @ingroup platform
- */
-void _glfwPlatformUnhideWindow(_GLFWwindow* window);
-
 /*! @copydoc glfwHideWindow
  *  @ingroup platform
  */
@@ -582,11 +522,6 @@ void _glfwPlatformPollEvents(void);
  *  @ingroup platform
  */
 void _glfwPlatformWaitEvents(void);
-
-/*! @copydoc glfwPostEmptyEvent
- *  @ingroup platform
- */
-void _glfwPlatformPostEmptyEvent(void);
 
 /*! @copydoc glfwMakeContextCurrent
  *  @ingroup platform
@@ -608,8 +543,7 @@ void _glfwPlatformSwapBuffers(_GLFWwindow* window);
  */
 void _glfwPlatformSwapInterval(int interval);
 
-/*! @copydoc glfwExtensionSupported
- *  @ingroup platform
+/*! @ingroup platform
  */
 int _glfwPlatformExtensionSupported(const char* extension);
 
@@ -617,21 +551,6 @@ int _glfwPlatformExtensionSupported(const char* extension);
  *  @ingroup platform
  */
 GLFWglproc _glfwPlatformGetProcAddress(const char* procname);
-
-/*! @copydoc glfwCreateCursor
- *  @ingroup platform
- */
-int _glfwPlatformCreateCursor(_GLFWcursor* cursor, const GLFWimage* image, int xhot, int yhot);
-
-/*! @copydoc glfwDestroyCursor
- *  @ingroup platform
- */
-void _glfwPlatformDestroyCursor(_GLFWcursor* cursor);
-
-/*! @copydoc glfwSetCursor
- *  @ingroup platform
- */
-void _glfwPlatformSetCursor(_GLFWwindow* window, _GLFWcursor* cursor);
 
 
 //========================================================================
@@ -710,12 +629,9 @@ void _glfwInputKey(_GLFWwindow* window, int key, int scancode, int action, int m
 /*! @brief Notifies shared code of a Unicode character input event.
  *  @param[in] window The window that received the event.
  *  @param[in] codepoint The Unicode code point of the input character.
- *  @param[in] mods Bit field describing which modifier keys were held down.
- *  @param[in] plain `GL_TRUE` if the character is regular text input, or
- *  `GL_FALSE` otherwise.
  *  @ingroup event
  */
-void _glfwInputChar(_GLFWwindow* window, unsigned int codepoint, int mods, int plain);
+void _glfwInputChar(_GLFWwindow* window, unsigned int codepoint);
 
 /*! @brief Notifies shared code of a scroll event.
  *  @param[in] window The window that received the event.
@@ -763,14 +679,6 @@ void _glfwInputMonitorChange(void);
  */
 void _glfwInputError(int error, const char* format, ...);
 
-/*! @brief Notifies dropped object over window.
- *  @param[in] window The window that received the event.
- *  @param[in] count The number of dropped objects.
- *  @param[in] names The names of the dropped objects.
- *  @ingroup event
- */
-void _glfwInputDrop(_GLFWwindow* window, int count, const char** names);
-
 
 //========================================================================
 // Utility functions
@@ -812,14 +720,13 @@ const _GLFWfbconfig* _glfwChooseFBConfig(const _GLFWfbconfig* desired,
                                          unsigned int count);
 
 /*! @brief Retrieves the attributes of the current context.
- *  @param[in] ctxconfig The desired context attributes.
  *  @return `GL_TRUE` if successful, or `GL_FALSE` if the context is unusable.
  *  @ingroup utility
  */
-GLboolean _glfwRefreshContextAttribs(const _GLFWctxconfig* ctxconfig);
+GLboolean _glfwRefreshContextAttribs(void);
 
 /*! @brief Checks whether the desired context attributes are valid.
- *  @param[in] ctxconfig The context attributes to check.
+ *  @param[in] wndconfig The context attributes to check.
  *  @return `GL_TRUE` if the context attributes are valid, or `GL_FALSE`
  *  otherwise.
  *  @ingroup utility
@@ -828,16 +735,16 @@ GLboolean _glfwRefreshContextAttribs(const _GLFWctxconfig* ctxconfig);
  *  exists and whether all relevant options have supported and non-conflicting
  *  values.
  */
-GLboolean _glfwIsValidContextConfig(const _GLFWctxconfig* ctxconfig);
+GLboolean _glfwIsValidContextConfig(_GLFWwndconfig* wndconfig);
 
 /*! @brief Checks whether the current context fulfils the specified hard
  *  constraints.
- *  @param[in] ctxconfig The desired context attributes.
+ *  @param[in] wndconfig The desired context attributes.
  *  @return `GL_TRUE` if the context fulfils the hard constraints, or `GL_FALSE`
  *  otherwise.
  *  @ingroup utility
  */
-GLboolean _glfwIsValidContext(const _GLFWctxconfig* ctxconfig);
+GLboolean _glfwIsValidContext(_GLFWwndconfig* wndconfig);
 
 /*! @ingroup utility
  */
@@ -855,15 +762,15 @@ void _glfwFreeGammaArrays(GLFWgammaramp* ramp);
  *  @return The newly created object.
  *  @ingroup utility
  */
-_GLFWmonitor* _glfwAllocMonitor(const char* name, int widthMM, int heightMM);
+_GLFWmonitor* _glfwCreateMonitor(const char* name, int widthMM, int heightMM);
 
 /*! @brief Frees a monitor object and any data associated with it.
  *  @ingroup utility
   */
-void _glfwFreeMonitor(_GLFWmonitor* monitor);
+void _glfwDestroyMonitor(_GLFWmonitor* monitor);
 
 /*! @ingroup utility
   */
-void _glfwFreeMonitors(_GLFWmonitor** monitors, int count);
+void _glfwDestroyMonitors(_GLFWmonitor** monitors, int count);
 
 #endif // _internal_h_

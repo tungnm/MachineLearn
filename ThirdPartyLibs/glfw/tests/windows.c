@@ -32,7 +32,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-static const char* titles[4] =
+static const char* titles[] =
 {
     "Foo",
     "Bar",
@@ -43,16 +43,6 @@ static const char* titles[4] =
 static void error_callback(int error, const char* description)
 {
     fprintf(stderr, "Error: %s\n", description);
-}
-
-static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
-{
-    if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
-    {
-        int xpos, ypos;
-        glfwGetWindowPos(window, &xpos, &ypos);
-        glfwSetWindowPos(window, xpos, ypos);
-    }
 }
 
 int main(void)
@@ -70,8 +60,6 @@ int main(void)
 
     for (i = 0;  i < 4;  i++)
     {
-        int left, top, right, bottom;
-
         windows[i] = glfwCreateWindow(200, 200, titles[i], NULL, NULL);
         if (!windows[i])
         {
@@ -79,22 +67,15 @@ int main(void)
             exit(EXIT_FAILURE);
         }
 
-        glfwSetKeyCallback(windows[i], key_callback);
-
         glfwMakeContextCurrent(windows[i]);
         glClearColor((GLclampf) (i & 1),
                      (GLclampf) (i >> 1),
                      i ? 0.f : 1.f,
                      0.f);
 
-        glfwGetWindowFrameSize(windows[i], &left, &top, &right, &bottom);
-        glfwSetWindowPos(windows[i],
-                         100 + (i & 1) * (200 + left + right),
-                         100 + (i >> 1) * (200 + top + bottom));
-    }
-
-    for (i = 0;  i < 4;  i++)
+        glfwSetWindowPos(windows[i], 100 + (i & 1) * 300, 100 + (i >> 1) * 300);
         glfwShowWindow(windows[i]);
+    }
 
     while (running)
     {

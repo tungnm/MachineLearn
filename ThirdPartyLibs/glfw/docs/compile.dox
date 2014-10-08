@@ -124,7 +124,7 @@ destination for binaries.  Choose *Configure*, change any options you wish to,
 
 The CMake files for GLFW provide a number of options, although not all are
 available on all supported platforms.  Some of these are de facto standards
-among projects using CMake and so have no `GLFW_` prefix.
+among CMake users and so have no `GLFW_` prefix.
 
 If you are using the GUI version of CMake, these are listed and can be changed
 from there.  If you are using the command-line version, use the `ccmake` tool.
@@ -164,9 +164,6 @@ directory of bundled applications to the `Contents/Resources` directory.
 
 `GLFW_USE_MENUBAR` determines whether the first call to
 `glfwCreateWindow` sets up a minimal menu bar.
-
-`GLFW_USE_RETINA` determines whether windows will use the full resolution of
-Retina displays.
 
 `GLFW_BUILD_UNIVERSAL` determines whether to build Universal Binaries.
 
@@ -219,7 +216,6 @@ ramps and clipboard.  The options are:
  - `_GLFW_COCOA` to use the Cocoa frameworks
  - `_GLFW_WIN32` to use the Win32 API
  - `_GLFW_X11` to use the X Window System
- - `_GLFW_WAYLAND` to use the Wayland API (experimental and incomplete)
 
 The context creation API is used to enumerate pixel formats / framebuffer
 configurations and to create contexts.  The options are:
@@ -227,7 +223,7 @@ configurations and to create contexts.  The options are:
  - `_GLFW_NSGL` to use the Cocoa OpenGL framework
  - `_GLFW_WGL` to use the Win32 WGL API
  - `_GLFW_GLX` to use the X11 GLX API
- - `_GLFW_EGL` to use the EGL API
+ - `_GLFW_EGL` to use the EGL API (experimental)
 
 The client library is the one providing the OpenGL or OpenGL ES API, which is
 used by GLFW to probe the created context.  This is not the same thing as the
@@ -261,7 +257,5 @@ available:
    application bundle during @ref glfwInit (recommended)
  - `_GLFW_USE_MENUBAR` to create and populate the menu bar when the first window
    is created (recommended)
- - `_GLFW_USE_RETINA` to have windows use the full resolution of Retina displays
-   (recommended)
 
 */

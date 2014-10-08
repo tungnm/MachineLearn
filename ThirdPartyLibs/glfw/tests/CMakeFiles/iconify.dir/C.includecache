@@ -6,17 +6,19 @@
 
 #IncludeRegexTransform: 
 
-/Users/tungnguyen/code/MachineLearn/ThirdPartyLibs/glfw/deps/getopt.c
-getopt.h
-/Users/tungnguyen/code/MachineLearn/ThirdPartyLibs/glfw/deps/getopt.h
-stddef.h
+/home/son/glfw-3.0.4/deps/getopt.c
+stdio.h
+-
+stdlib.h
 -
 string.h
 -
+getopt.h
+/home/son/glfw-3.0.4/deps/getopt.h
 
-/Users/tungnguyen/code/MachineLearn/ThirdPartyLibs/glfw/deps/getopt.h
+/home/son/glfw-3.0.4/deps/getopt.h
 
-/Users/tungnguyen/code/MachineLearn/ThirdPartyLibs/glfw/tests/iconify.c
+/home/son/glfw-3.0.4/tests/iconify.c
 GLFW/glfw3.h
 -
 stdio.h
@@ -24,11 +26,11 @@ stdio.h
 stdlib.h
 -
 getopt.h
-/Users/tungnguyen/code/MachineLearn/ThirdPartyLibs/glfw/tests/getopt.h
+/home/son/glfw-3.0.4/tests/getopt.h
 
-ThirdPartyLibs/glfw/deps/getopt.h
+deps/getopt.h
 
-ThirdPartyLibs/glfw/include/GLFW/glfw3.h
+include/GLFW/glfw3.h
 stddef.h
 -
 OpenGL/gl3.h
@@ -44,8 +46,6 @@ GLES/gl.h
 GLES2/gl2.h
 -
 GLES3/gl3.h
--
-GLES3/gl31.h
 -
 GL/gl.h
 -

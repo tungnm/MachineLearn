@@ -29,6 +29,7 @@
 //
 //========================================================================
 
+#define GLFW_INCLUDE_GLU
 #include <GLFW/glfw3.h>
 #include <GL/glext.h>
 
@@ -124,7 +125,7 @@ int main(int argc, char** argv)
         printf("Context reports FSAA is unavailable\n");
 
     glMatrixMode(GL_PROJECTION);
-    glOrtho(0.f, 1.f, 0.f, 0.5f, 0.f, 1.f);
+    gluOrtho2D(0.f, 1.f, 0.f, 0.5f);
     glMatrixMode(GL_MODELVIEW);
 
     while (!glfwWindowShouldClose(window))

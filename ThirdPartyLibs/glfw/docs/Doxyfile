@@ -32,7 +32,7 @@ PROJECT_NAME           = "GLFW"
 # This could be handy for archiving the generated documentation or
 # if some version control system is used.
 
-PROJECT_NUMBER         = 3.1.0
+PROJECT_NUMBER         = 3.0.4
 
 # Using the PROJECT_BRIEF tag one can provide an optional one line description
 # for a project that appears at the top of each page and should give viewer
@@ -52,7 +52,7 @@ PROJECT_LOGO           =
 # If a relative path is entered, it will be relative to the location
 # where doxygen was started. If left blank the current directory will be used.
 
-OUTPUT_DIRECTORY       = /Users/tungnguyen/code/MachineLearn/ThirdPartyLibs/glfw/docs
+OUTPUT_DIRECTORY       = /home/son/glfw-3.0.4/docs
 
 # If the CREATE_SUBDIRS tag is set to YES, then doxygen will create
 # 4096 sub-directories (in 2 levels) under the output directory of each output
@@ -641,7 +641,7 @@ WARN_FORMAT            = "$file:$line: $text"
 # and error messages should be written. If left blank the output is written
 # to stderr.
 
-WARN_LOGFILE           = /Users/tungnguyen/code/MachineLearn/ThirdPartyLibs/glfw/docs/warnings.txt
+WARN_LOGFILE           = /home/son/glfw-3.0.4/docs/warnings.txt
 
 #---------------------------------------------------------------------------
 # configuration options related to the input files
@@ -653,20 +653,18 @@ WARN_LOGFILE           = /Users/tungnguyen/code/MachineLearn/ThirdPartyLibs/glfw
 # with spaces.
 
 INPUT                  =                          \
-                         /Users/tungnguyen/code/MachineLearn/ThirdPartyLibs/glfw/include/GLFW/glfw3.h       \
-                         /Users/tungnguyen/code/MachineLearn/ThirdPartyLibs/glfw/include/GLFW/glfw3native.h \
-                         /Users/tungnguyen/code/MachineLearn/ThirdPartyLibs/glfw/docs/main.dox              \
-                         /Users/tungnguyen/code/MachineLearn/ThirdPartyLibs/glfw/docs/news.dox              \
-                         /Users/tungnguyen/code/MachineLearn/ThirdPartyLibs/glfw/docs/moving.dox            \
-                         /Users/tungnguyen/code/MachineLearn/ThirdPartyLibs/glfw/docs/quick.dox             \
-                         /Users/tungnguyen/code/MachineLearn/ThirdPartyLibs/glfw/docs/compile.dox           \
-                         /Users/tungnguyen/code/MachineLearn/ThirdPartyLibs/glfw/docs/build.dox             \
-                         /Users/tungnguyen/code/MachineLearn/ThirdPartyLibs/glfw/docs/intro.dox             \
-                         /Users/tungnguyen/code/MachineLearn/ThirdPartyLibs/glfw/docs/context.dox           \
-                         /Users/tungnguyen/code/MachineLearn/ThirdPartyLibs/glfw/docs/monitor.dox           \
-                         /Users/tungnguyen/code/MachineLearn/ThirdPartyLibs/glfw/docs/window.dox            \
-                         /Users/tungnguyen/code/MachineLearn/ThirdPartyLibs/glfw/docs/input.dox             \
-                         /Users/tungnguyen/code/MachineLearn/ThirdPartyLibs/glfw/docs/compat.dox
+                         /home/son/glfw-3.0.4/include/GLFW/glfw3.h       \
+                         /home/son/glfw-3.0.4/include/GLFW/glfw3native.h \
+                         /home/son/glfw-3.0.4/docs/main.dox              \
+                         /home/son/glfw-3.0.4/docs/news.dox              \
+                         /home/son/glfw-3.0.4/docs/quick.dox             \
+                         /home/son/glfw-3.0.4/docs/moving.dox            \
+                         /home/son/glfw-3.0.4/docs/compile.dox           \
+                         /home/son/glfw-3.0.4/docs/build.dox             \
+                         /home/son/glfw-3.0.4/docs/context.dox           \
+                         /home/son/glfw-3.0.4/docs/monitor.dox           \
+                         /home/son/glfw-3.0.4/docs/window.dox            \
+                         /home/son/glfw-3.0.4/docs/compat.dox
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding, which is
@@ -726,7 +724,7 @@ EXCLUDE_SYMBOLS        = APIENTRY GLFWAPI
 # directories that contain example code fragments that are included (see
 # the \include command).
 
-EXAMPLE_PATH           = /Users/tungnguyen/code/MachineLearn/ThirdPartyLibs/glfw/examples
+EXAMPLE_PATH           = /home/son/glfw-3.0.4/examples
 
 # If the value of the EXAMPLE_PATH tag contains directories, you can use the
 # EXAMPLE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp
@@ -902,13 +900,13 @@ HTML_FILE_EXTENSION    = .html
 # have to redo this when upgrading to a newer version of doxygen or when
 # changing the value of configuration settings such as GENERATE_TREEVIEW!
 
-HTML_HEADER            = /Users/tungnguyen/code/MachineLearn/ThirdPartyLibs/glfw/docs/header.html
+HTML_HEADER            = /home/son/glfw-3.0.4/docs/header.html
 
 # The HTML_FOOTER tag can be used to specify a personal HTML footer for
 # each generated HTML page. If it is left blank doxygen will generate a
 # standard footer.
 
-HTML_FOOTER            = /Users/tungnguyen/code/MachineLearn/ThirdPartyLibs/glfw/docs/footer.html
+HTML_FOOTER            = /home/son/glfw-3.0.4/docs/footer.html
 
 # The HTML_STYLESHEET tag can be used to specify a user-defined cascading
 # style sheet that is used by each HTML page. It can be used to
@@ -927,7 +925,7 @@ HTML_STYLESHEET        =
 # robust against future updates. Doxygen will copy the style sheet file to
 # the output directory.
 
-HTML_EXTRA_STYLESHEET  = /Users/tungnguyen/code/MachineLearn/ThirdPartyLibs/glfw/docs/extra.css
+HTML_EXTRA_STYLESHEET  = /home/son/glfw-3.0.4/docs/extra.css
 
 # The HTML_EXTRA_FILES tag can be used to specify one or more extra images or
 # other source files which should be copied to the HTML output directory. Note
@@ -1468,6 +1466,18 @@ GENERATE_XML           = NO
 # put in front of it. If left blank `xml' will be used as the default path.
 
 XML_OUTPUT             = xml
+
+# The XML_SCHEMA tag can be used to specify an XML schema,
+# which can be used by a validating XML parser to check the
+# syntax of the XML files.
+
+XML_SCHEMA             =
+
+# The XML_DTD tag can be used to specify an XML DTD,
+# which can be used by a validating XML parser to check the
+# syntax of the XML files.
+
+XML_DTD                =
 
 # If the XML_PROGRAMLISTING tag is set to YES Doxygen will
 # dump the program listings (including syntax highlighting

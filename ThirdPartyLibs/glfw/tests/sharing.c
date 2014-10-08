@@ -27,6 +27,7 @@
 //
 //========================================================================
 
+#define GLFW_INCLUDE_GLU
 #include <GLFW/glfw3.h>
 
 #include <stdio.h>
@@ -99,7 +100,7 @@ static void draw_quad(GLuint texture)
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho(0.f, 1.f, 0.f, 1.f, 0.f, 1.f);
+    gluOrtho2D(0.f, 1.f, 0.f, 1.f);
 
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, texture);

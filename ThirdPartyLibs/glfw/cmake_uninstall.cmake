@@ -1,9 +1,9 @@
 
-if (NOT EXISTS "/Users/tungnguyen/code/MachineLearn/ThirdPartyLibs/glfw/install_manifest.txt")
-  message(FATAL_ERROR "Cannot find install manifest: \"/Users/tungnguyen/code/MachineLearn/ThirdPartyLibs/glfw/install_manifest.txt\"")
+if (NOT EXISTS "/home/son/glfw-3.0.4/install_manifest.txt")
+  message(FATAL_ERROR "Cannot find install manifest: \"/home/son/glfw-3.0.4/install_manifest.txt\"")
 endif()
 
-file(READ "/Users/tungnguyen/code/MachineLearn/ThirdPartyLibs/glfw/install_manifest.txt" files)
+file(READ "/home/son/glfw-3.0.4/install_manifest.txt" files)
 string(REGEX REPLACE "\n" ";" files "${files}")
 
 foreach (file ${files})

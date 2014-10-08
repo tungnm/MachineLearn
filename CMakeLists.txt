@@ -8,27 +8,17 @@ include_directories("${PROJECT_SOURCE_DIR}/ThirdPartyLibs/glfw/include")
 include_directories("${PROJECT_SOURCE_DIR}/ThirdPartyLibs/MUD/")
 include_directories("${PROJECT_SOURCE_DIR}/ThirdPartyLibs/")
 add_subdirectory ("${PROJECT_SOURCE_DIR}/ThirdPartyLibs/glfw/")
-if (WIN32)
-set (MUD_SOURCE
-		    ThirdPartyLibs/MUD/threading/windows/WindowsSimpleLock.cpp
-		    ThirdPartyLibs/MUD/threading/windows/WindowsThread.cpp
-		    ThirdPartyLibs/MUD/threading/windows/WindowsThreadUtil.cpp
-		    ThirdPartyLibs/MUD/threading/windows/WindowsWaitableLock.cpp
-		    ThirdPartyLibs/MUD/base/TimeVal.cpp
-		    ThirdPartyLibs/MUD/base/windows/WindowsTimeVal.cpp
-		    ThirdPartyLibs/AmazonCompositeResult/SimpleResultCodes.cpp
-		    )
-elseif (UNIX)
+
 	set (MUD_SOURCE
 	    ThirdPartyLibs/MUD/threading/unix/UnixSimpleLock.cpp
 	    ThirdPartyLibs/MUD/threading/unix/UnixThread.cpp
 	    ThirdPartyLibs/MUD/threading/unix/UnixThreadUtil.cpp
 	    ThirdPartyLibs/MUD/threading/unix/UnixWaitableLock.cpp
 	    ThirdPartyLibs/MUD/base/TimeVal.cpp
+	    ThirdPartyLibs/MUD/base/unix/DesktopUnixTimeVal.cpp
 	    ThirdPartyLibs/MUD/base/unix/SharedUnixTimeVal.cpp
 	    ThirdPartyLibs/AmazonCompositeResult/SimpleResultCodes.cpp
 	    )
-endif (WIN32)
 
 add_executable (test1 testMain.cc renderer.cpp ${MUD_SOURCE})
 target_link_libraries(test1 glfw ${GLFW_LIBRARIES})

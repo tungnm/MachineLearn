@@ -1,23 +1,27 @@
-file(REMOVE_RECURSE
+FILE(REMOVE_RECURSE
+  "CMakeFiles/glfw.dir/clipboard.c.o"
   "CMakeFiles/glfw.dir/context.c.o"
+  "CMakeFiles/glfw.dir/gamma.c.o"
   "CMakeFiles/glfw.dir/init.c.o"
   "CMakeFiles/glfw.dir/input.c.o"
   "CMakeFiles/glfw.dir/joystick.c.o"
   "CMakeFiles/glfw.dir/monitor.c.o"
   "CMakeFiles/glfw.dir/time.c.o"
   "CMakeFiles/glfw.dir/window.c.o"
-  "CMakeFiles/glfw.dir/cocoa_init.m.o"
-  "CMakeFiles/glfw.dir/cocoa_monitor.m.o"
-  "CMakeFiles/glfw.dir/cocoa_window.m.o"
-  "CMakeFiles/glfw.dir/iokit_joystick.m.o"
-  "CMakeFiles/glfw.dir/mach_time.c.o"
-  "CMakeFiles/glfw.dir/posix_tls.c.o"
-  "CMakeFiles/glfw.dir/nsgl_context.m.o"
+  "CMakeFiles/glfw.dir/x11_clipboard.c.o"
+  "CMakeFiles/glfw.dir/x11_gamma.c.o"
+  "CMakeFiles/glfw.dir/x11_init.c.o"
+  "CMakeFiles/glfw.dir/x11_joystick.c.o"
+  "CMakeFiles/glfw.dir/x11_monitor.c.o"
+  "CMakeFiles/glfw.dir/x11_time.c.o"
+  "CMakeFiles/glfw.dir/x11_window.c.o"
+  "CMakeFiles/glfw.dir/x11_unicode.c.o"
+  "CMakeFiles/glfw.dir/glx_context.c.o"
   "libglfw3.pdb"
   "libglfw3.a"
 )
 
 # Per-language clean rules from dependency scanning.
-foreach(lang C)
-  include(CMakeFiles/glfw.dir/cmake_clean_${lang}.cmake OPTIONAL)
-endforeach()
+FOREACH(lang C)
+  INCLUDE(CMakeFiles/glfw.dir/cmake_clean_${lang}.cmake OPTIONAL)
+ENDFOREACH(lang)

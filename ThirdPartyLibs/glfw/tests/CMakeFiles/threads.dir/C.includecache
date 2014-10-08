@@ -6,9 +6,9 @@
 
 #IncludeRegexTransform: 
 
-/Users/tungnguyen/code/MachineLearn/ThirdPartyLibs/glfw/deps/tinycthread.c
+/home/son/glfw-3.0.4/deps/tinycthread.c
 tinycthread.h
-/Users/tungnguyen/code/MachineLearn/ThirdPartyLibs/glfw/deps/tinycthread.h
+/home/son/glfw-3.0.4/deps/tinycthread.h
 stdlib.h
 -
 signal.h
@@ -26,7 +26,7 @@ process.h
 sys/timeb.h
 -
 
-/Users/tungnguyen/code/MachineLearn/ThirdPartyLibs/glfw/deps/tinycthread.h
+/home/son/glfw-3.0.4/deps/tinycthread.h
 time.h
 -
 pthread.h
@@ -34,9 +34,9 @@ pthread.h
 windows.h
 -
 
-/Users/tungnguyen/code/MachineLearn/ThirdPartyLibs/glfw/tests/threads.c
+/home/son/glfw-3.0.4/tests/threads.c
 tinycthread.h
-/Users/tungnguyen/code/MachineLearn/ThirdPartyLibs/glfw/tests/tinycthread.h
+/home/son/glfw-3.0.4/tests/tinycthread.h
 GLFW/glfw3.h
 -
 stdio.h
@@ -46,7 +46,7 @@ stdlib.h
 math.h
 -
 
-ThirdPartyLibs/glfw/deps/tinycthread.h
+deps/tinycthread.h
 time.h
 -
 pthread.h
@@ -54,7 +54,7 @@ pthread.h
 windows.h
 -
 
-ThirdPartyLibs/glfw/include/GLFW/glfw3.h
+include/GLFW/glfw3.h
 stddef.h
 -
 OpenGL/gl3.h
@@ -70,8 +70,6 @@ GLES/gl.h
 GLES2/gl2.h
 -
 GLES3/gl3.h
--
-GLES3/gl31.h
 -
 GL/gl.h
 -
