@@ -38,6 +38,16 @@ void Renderer::drawEnvironment(Environment* env)
         }
    }
 }
+
+bool Renderer::addPath(std::vector<Point> path)
+{
+    DrawingPath newPath;
+    newPath.mCurrentPathIndex = 0;
+    newPath.mPath = path;
+
+    return mDrawingPathQueue.push(newPath);
+}
+
 void Renderer::drawCell(int i, int j)
 {
     drawSquare(
@@ -58,33 +68,101 @@ void Renderer::drawPath(DrawingPath path)
 }
 void Renderer::run()
 {
+    init();
     while (!glfwWindowShouldClose(window))
     {
         glClear(GL_COLOR_BUFFER_BIT);
-       // drawEnvironment(mEnvironment);
+        drawEnvironment(mEnvironment);
 
-       // drawPath(mCurrentDrawingPath);
+        drawPath(mCurrentDrawingPath);
         glfwSwapBuffers(window);
-            //update code:
+        //maintain fps of 30
+        mud::ThreadUtil::sleep(33);
+        glfwPollEvents();
+    }
+
+    {
+        mud::ScopeLock sl(mShouldExitLock);
+        mShouldExit = true;
+        //signal the waiting queue so the event loop thread can terminate.
+        mDrawingPathQueue.interrupt();
+    }
+
+    glfwDestroyWindow(window);
+    glfwTerminate(); 
+   
+}
+
+bool Renderer::shouldExit()
+{
+    mud::ScopeLock sl(mShouldExitLock);
+    return mShouldExit;
+}
+
+int Renderer::getCurrentPathIndex()
+{
+    mud::ScopeLock sl(mCurrentDrawingPathLock);
+    return mCurrentDrawingPath.mCurrentPathIndex;
+
+}
+
+void Renderer::incrementCurrentPathIndex()
+{
+    mud::ScopeLock sl(mCurrentDrawingPathLock);
+    mCurrentDrawingPath.mCurrentPathIndex++;
+}
+void Renderer::startEventLoop()
+{
+    et.start();
+}
+
+void Renderer::eventLoop()
+{
+    while(!shouldExit())
+    {
+         //If still drawing a path:
         if (mCurrentDrawingPath.mCurrentPathIndex < mCurrentDrawingPath.mPath.size())
-        mCurrentDrawingPath.mCurrentPathIndex++;
+        {
+            incrementCurrentPathIndex();
+            mud::ThreadUtil::sleep(1000 / mAnimationSpeed);
+        }
         //sleep for a while here
         if (mCurrentDrawingPath.mCurrentPathIndex == mCurrentDrawingPath.mPath.size())
         {
-            //done drawing this path, maybe sleep for another while
+            //done drawing this path, wait and pop the next one
+            mDrawingPathQueue.waitAndPop(mCurrentDrawingPath);
 
         }
-        glfwPollEvents();
+        
     }
-    //mud::ThreadUtil::sleep(5000);
-    
-    printf("\n done with sleep");
+
+}
+Renderer::Renderer() 
+    : mud::Thread("Renderer"), 
+    mShouldExit(false),
+    mDrawingPathQueue(MAX_DRAWING_PATH_QUEUE_SIZE),
+    et("Renderer", *this),
+    mAnimationSpeed(1)
+{
+    mCurrentDrawingPath.mCurrentPathIndex = 0;
+    mCurrentDrawingPath.mPath.clear();
 }
 
-Renderer::Renderer() : mud::Thread("Renderer")
-{}
-void Renderer::startDrawing()
+Renderer::~Renderer()
 {
+    join();
+    et.join();
+    //prevent an assertion here, todo: implement this correctly, understand
+    //mud first.
+    DrawingPath path;
+    while(!mDrawingPathQueue.empty())
+    {
+        mDrawingPathQueue.pop(path);
+    }
+}
+void Renderer::startDrawing(int animationSpeed)
+{
+    mAnimationSpeed = animationSpeed;
     start();
 }
 
@@ -123,29 +201,5 @@ void Renderer::init()
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glOrtho(0, 0, -1.f, 1.f, 1.f, -1.f);
-    //test patj
-    Point p(0,1);
-    Point p1(1,1);
-    Point p2(1,2);
-    Point p3(2,2);
-    Point p4(2,3);
-    Point p5(2,4);
-    Point p6(2,5);
-    mCurrentDrawingPath.mCurrentPathIndex = 0;
-    mCurrentDrawingPath.mPath.push_back(p);
-    mCurrentDrawingPath.mPath.push_back(p1);
-    mCurrentDrawingPath.mPath.push_back(p2);
-    mCurrentDrawingPath.mPath.push_back(p2);
-    mCurrentDrawingPath.mPath.push_back(p3);
-    mCurrentDrawingPath.mPath.push_back(p4);
-    mCurrentDrawingPath.mPath.push_back(p5);
-    mCurrentDrawingPath.mPath.push_back(p6);
-}
-void Renderer::deinit()
-{
-    join();
-    glfwDestroyWindow(window);
-    glfwTerminate(); 
-    printf("\n deinit");
-}
 
+}

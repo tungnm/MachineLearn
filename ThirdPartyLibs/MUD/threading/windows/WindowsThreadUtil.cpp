@@ -20,12 +20,12 @@ using namespace mud;
 
 void ThreadUtil::setAccurateTiming()
 {
-  timeBeginPeriod(1);
+
 }
 
 void ThreadUtil::unsetAccurateTiming()
 {
-  timeEndPeriod(1);
+
 }
 
 void ThreadUtil::sleep( unsigned long milliseconds ) 
