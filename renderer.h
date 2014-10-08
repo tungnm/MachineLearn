@@ -1,3 +1,5 @@
+#ifndef RENDERER_H
+#define RENDERER_H
 #include "GLFW/glfw3.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -8,10 +10,17 @@
 #include "threading/SimpleLock.h"
 #include "threading/ScopeLock.h"
 #include "memory/ThreadsafeQueue.h"
+struct PointSimple 
+{
+    int x;
+    int y;
+};
+
+
 struct DrawingPath
     {
         int mCurrentPathIndex;
-        std::vector<Point> mPath;
+        std::vector<PointSimple> mPath;
 };
 class Renderer : mud::Thread
 {
@@ -25,7 +34,7 @@ public:
     void startEventLoop();
     //Provide a path for the renderer to draw. This function is thread-safe.
     //return false if the queue of paths is full
-    bool addPath(std::vector<Point> path);
+    bool addPath(std::vector<PointSimple> path);
 
 private:
     void init();
@@ -46,7 +55,7 @@ private:
 
     void drawEnvironment(Environment* env);
 
-    void drawCell(int i, int j);
+    void drawCell(int i, int j, double brightness = 1.0f);
 
     void drawPath(DrawingPath path);
 
@@ -81,6 +90,4 @@ private:
     int mAnimationSpeed;
 };
 
-
-
-
+#endif

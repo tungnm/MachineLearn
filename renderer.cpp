@@ -23,23 +23,31 @@ void Renderer::drawSquare(float x, float y, float scaleX, float scaleY)
 }
 void Renderer::drawEnvironment(Environment* env)
 {
-   glColor3f(1.f, 1.f, 1.f);
+	if(env == NULL)
+	return;
    for(int i = 0; i < MAP_WIDTH; i++)
    {
         for(int j = 0; j < MAP_HEIGHT; j++)
         {
-            //todo: can add code to draw each type of cell
+            //wind cell has blue color
+	    int att = env->map[i][j].getAttribute();
+	    if (att > 0)
+	    {
+		    glColor3f(0.f, 0.f, 0.2f * att);
+	    }
+	    else
+		glColor3f(1.f, 1.f, 1.f);
             //differently
             drawSquare(
             -1.0 + i * mCellSize, 
-            1.0 - mCellSize - j * mCellSize,
+            -1.0 + j * mCellSize,
             mCellSize,
             mCellSize); 
         }
    }
 }
 
-bool Renderer::addPath(std::vector<Point> path)
+bool Renderer::addPath(std::vector<PointSimple> path)
 {
     DrawingPath newPath;
     newPath.mCurrentPathIndex = 0;
@@ -48,22 +56,26 @@ bool Renderer::addPath(std::vector<Point> path)
     return mDrawingPathQueue.push(newPath);
 }
 
-void Renderer::drawCell(int i, int j)
+void Renderer::drawCell(int i, int j, double brightness)
 {
+    glColor3f(brightness, 0.f, 0.f);
     drawSquare(
-            -1.0 + j * mCellSize, 
-            1.0 - mCellSize - i * mCellSize,
+            -1.0 + i * mCellSize, 
+            -1.0 + j * mCellSize,
             mCellSize,
             mCellSize); 
 
 }
 void Renderer::drawPath(DrawingPath path)
 {
-    glColor3f(1.f, 0.f, 0.f);
-    //draw from the beginning to current index   
-    for(int i = 0; i < path.mCurrentPathIndex; i++)
+    //draw from the beginning to current index
+    int currentPatIndex = getCurrentPathIndex();  
+    for(int i = currentPatIndex; i > currentPatIndex - 3; i--)
     {
-        drawCell(path.mPath[i].x,path.mPath[i].y);
+        int denom = currentPatIndex - i;
+        if (denom == 0) denom = 1;
+        if(i >= 0 && path.mPath.size() > 0)
+        drawCell(path.mPath[i].x,path.mPath[i].y, 1.0 / denom);
     }
 }
 void Renderer::run()

@@ -7,6 +7,7 @@
 #include <vector>
 #include "point.h"
 #include "environment.h"
+#include "renderer.h"
 
 
 enum Action{ NORTH, EAST, SOUTH, WEST, EXIT};
@@ -31,7 +32,7 @@ public:
 	Agent(Environment *en);
 	//destructor
 	//~Agent();
-	void training();
+	void training(Renderer* myrenderer);
 	void runEpisode();
 	void updateStateValue(Point currentState, Action a, Point nextState);
 	Action chooseAction(Policy p, Point currentState, Point nextState);

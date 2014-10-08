@@ -28,7 +28,7 @@ Agent::Agent(Environment *envi)
 /*
  * the full training of the agent
  */
-void Agent::training()
+void Agent::training(Renderer* myrenderer)
 {
 	cout << "Beginning state: " << endl;
 	en->printAllMapValue();
@@ -37,6 +37,17 @@ void Agent::training()
 		path.clear();
 		episode++;
 		runEpisode();
+		//path is full
+		std::vector<PointSimple> newPath;
+		PointSimple point;
+		for(int i = 0; i< path.size();i++)
+		{
+			point.x = path[i].x;
+			point.y = path[i].y;
+			newPath.push_back(point);
+		}
+		std::cout << "FOUND PATH\n\n\n\n\n\n\n\n\n" << endl;
+		myrenderer->addPath(newPath);
 	}
 }
 
@@ -61,7 +72,7 @@ void Agent::runEpisode()
 		updateStateValue(currentState, currentAction, nextState);
 		actionTook++;
 		cout << "Action num: " << actionTook <<". Action: " << currentAction << endl;
-		en->printAllMapValue();
+		//en->printAllMapValue();
 		cout << "Current position: " << currentState.x<< "," << currentState.y << " next position : " << nextState.x <<","<< nextState.y << endl;	
 		currentState = nextState;
 	}

@@ -4,8 +4,8 @@
 //starting with a simple map
 //todo: make this attributes of Environment class instead of
 //define
-#define MAP_WIDTH 12 
-#define MAP_HEIGHT 5 
+#define MAP_WIDTH 10 
+#define MAP_HEIGHT 7 
 
 #include <iostream>
 #include "cell.h"
@@ -19,10 +19,10 @@ class Environment
 public:
  	//start state
 	Point ss;
-
-private:
 	//the map of the environment
 	Cell** map;
+
+private:
 	friend class Agent;
 public:
 	//constructor

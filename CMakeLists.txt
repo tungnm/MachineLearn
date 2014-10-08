@@ -9,16 +9,19 @@ include_directories("${PROJECT_SOURCE_DIR}/ThirdPartyLibs/MUD/")
 include_directories("${PROJECT_SOURCE_DIR}/ThirdPartyLibs/")
 add_subdirectory ("${PROJECT_SOURCE_DIR}/ThirdPartyLibs/glfw/")
 
-	set (MUD_SOURCE
-	    ThirdPartyLibs/MUD/threading/unix/UnixSimpleLock.cpp
-	    ThirdPartyLibs/MUD/threading/unix/UnixThread.cpp
-	    ThirdPartyLibs/MUD/threading/unix/UnixThreadUtil.cpp
-	    ThirdPartyLibs/MUD/threading/unix/UnixWaitableLock.cpp
-	    ThirdPartyLibs/MUD/base/TimeVal.cpp
-	    ThirdPartyLibs/MUD/base/unix/DesktopUnixTimeVal.cpp
-	    ThirdPartyLibs/MUD/base/unix/SharedUnixTimeVal.cpp
-	    ThirdPartyLibs/AmazonCompositeResult/SimpleResultCodes.cpp
-	    )
+set (MUD_SOURCE
+    ThirdPartyLibs/MUD/threading/unix/UnixSimpleLock.cpp
+    ThirdPartyLibs/MUD/threading/unix/UnixThread.cpp
+    ThirdPartyLibs/MUD/threading/unix/UnixThreadUtil.cpp
+    ThirdPartyLibs/MUD/threading/unix/UnixWaitableLock.cpp
+    ThirdPartyLibs/MUD/base/TimeVal.cpp
+    ThirdPartyLibs/MUD/base/unix/DesktopUnixTimeVal.cpp
+    ThirdPartyLibs/MUD/base/unix/SharedUnixTimeVal.cpp
+    ThirdPartyLibs/AmazonCompositeResult/SimpleResultCodes.cpp
+    agent.cpp
+    environment.cpp
+    main.cpp
+)
 
-add_executable (test1 testMain.cc renderer.cpp ${MUD_SOURCE})
-target_link_libraries(test1 glfw ${GLFW_LIBRARIES})
+add_executable (learning renderer.cpp ${MUD_SOURCE})
+target_link_libraries(learning glfw ${GLFW_LIBRARIES})

@@ -1,6 +1,5 @@
 #ifndef POINT_H
 #define POINT_H
-/*
 class Point
 {
 public:
@@ -26,11 +25,4 @@ public:
 		}
 	}
 };
-*/
-struct Point
-{
-    int x;
-    int y;
-};
-
 #endif
