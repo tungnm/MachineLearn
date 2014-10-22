@@ -31,7 +31,7 @@ Agent::Agent(Environment *envi)
 void Agent::training(Renderer* myrenderer)
 {
 	cout << "Beginning state: " << endl;
-	en->printAllMapValue();
+//	en->printAllMapValue();
 	while(episode <= MAX_EPISODE)
 	{
 		path.clear();
@@ -46,8 +46,15 @@ void Agent::training(Renderer* myrenderer)
 			point.y = path[i].y;
 			newPath.push_back(point);
 		}
-		std::cout << "FOUND PATH\n\n\n\n\n\n\n\n\n" << endl;
-		myrenderer->addPath(newPath);
+/*		std::cout << "FOUND PATH\n\n\n\n\n\n\n\n\n" << endl;
+		std::cout << "Finish episode: " << episode << endl;
+*/		if(episode == 1000)
+		{
+			en->printAllMapValue();
+			int a;
+			cin >> a;
+			myrenderer->addPath(newPath);
+		}
 	}
 }
 
@@ -60,6 +67,7 @@ void Agent::runEpisode()
 	Point currentState = en->ss;
 	int actionTook = 0;
 	bool isFinish = false;
+	//**********************************************************
 	while(isFinish == false)
 	{
 		Action currentAction = chooseAction(p, currentState, nextState);
@@ -67,13 +75,17 @@ void Agent::runEpisode()
 		{
 			isFinish = true;
 		}
-		nextState = makeAction(currentAction, currentState);
-		path.push_back(nextState);
+		else
+		{
+			nextState = makeAction(currentAction, currentState);			
+			path.push_back(nextState);
+		}
 		updateStateValue(currentState, currentAction, nextState);
-		actionTook++;
-		cout << "Action num: " << actionTook <<". Action: " << currentAction << endl;
 		//en->printAllMapValue();
-		cout << "Current position: " << currentState.x<< "," << currentState.y << " next position : " << nextState.x <<","<< nextState.y << endl;	
+		actionTook++;
+		//cout << "Action num: " << actionTook <<". Action: " << currentAction << endl;
+		//en->printAllMapValue();
+		//cout << "Current position: " << currentState.x<< "," << currentState.y << " next position : " << nextState.x <<","<< nextState.y << endl;	
 		currentState = nextState;
 	}
 }
@@ -87,13 +99,16 @@ void Agent::updateStateValue(Point currentState, Action a, Point nextState)
 	double currentValue = en->map[currentState.x][currentState.y].getActionValue(a);
 	double nextValue;
 	double tempValue = SENTINEL;
-	if(en->map[nextState.x][nextState.y].isTerminal() == true)
+	//if terminal return 10
+/*	if(en->map[nextState.x][nextState.y].isTerminal() == true)
 	{
 		nextValue = 10;
-	}
-	else
+		cout << "reach terminal: " << endl;
+	}*/
+	//else the max of Qs next state
+/*	else
 	{
-		for(int i = 0; i < 4; i++)
+		for(int i = 0; i <= 4; i++)
 		{
 			if(isMovable(Action(i),nextState))
 			{
@@ -104,16 +119,25 @@ void Agent::updateStateValue(Point currentState, Action a, Point nextState)
 				}
 			}
 		}
+	}*/	
+	if(en->map[currentState.x][currentState.y].isTerminal())
+	{
+		nextValue = 0;
+	}	
+	else
+	{
+		nextValue = en->getMaxActionValue(nextState.x,nextState.y);
 	}
 	double reward;
 	if(a == EXIT)
 	{
-		reward = 10;
+		reward = 50;
 	}
 	else
 	{
 		reward = -1;
 	}
+	//Q(s,a) = Q(s,a) + alpha(r + m(max next) - Q(s,a))
 	newValue = currentValue*(1-alpha) + alpha*(reward + gamma * nextValue);
 	en->map[currentState.x][currentState.y].setActionValue(newValue,a);
 }

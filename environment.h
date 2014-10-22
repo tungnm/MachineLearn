@@ -35,5 +35,8 @@ public:
     {
         return map; 
     }
+
+    //get max action value of a single cell
+    double getMaxActionValue(int i, int j);
 };
 #endif

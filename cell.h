@@ -4,9 +4,9 @@
 using namespace std;
 class Cell
 {
+	double value[5];
 private:
 	//state value
-	double value[4];
 	
 	//is Terminal
 	bool terminal;
@@ -67,6 +67,14 @@ public:
 	double getAttribute()
 	{
 		return attribute;
+	}
+	void printAllCellValue()
+	{
+		cout << "Up: " << value[0] << endl;
+		cout << "Right: " << value[1] << endl;
+		cout << "Down: " << value[2] << endl;
+		cout << "Left: " << value[3] << endl;
+		cout << "Exit: " << value[4] << endl;
 	}
 };
 #endif

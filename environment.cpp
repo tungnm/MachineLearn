@@ -2,6 +2,7 @@
 #include "environment.h"
 #include "cell.h"
 #include "point.h"
+#include <vector>
 #include <iomanip> 
 
 Environment::Environment(Point start, Point terminal)
@@ -25,7 +26,6 @@ void Environment::setWind(int col, int level)
 	}
 }
 /*
- *
 
 map representation of positions regarding WIDTH and HEIGHT
 (0,6) (1,6) (2,6) (3,6) (4,6) (5,6) (6,6) (7,6) (8,6) (9,6)
@@ -44,15 +44,57 @@ void Environment::printAllMapValue()
 	{
 		for(int i = 0; i < MAP_WIDTH; i++)
 		{
-			for(int k = 0; k < 5; k++)
+			cout << std::fixed;
+			if(getMaxActionValue(i,j) < 0 )
 			{
-				cout << std::fixed;
-				cout << std::setprecision(2) << map[i][j].getActionValue(k) << " ";
-				if(i == MAP_WIDTH -1 && k == 4)
-				{
-					cout << "\n";
-				}
+				cout << " " << std::setprecision(2) << getMaxActionValue(i,j);
+			}
+			else
+			{
+				cout << "  " << std::setprecision(2) << getMaxActionValue(i,j);
+			}
+			if(i == MAP_WIDTH -1)
+			{
+				cout << "\n";
 			}
 		}
 	}
+}
+
+//get max action value of a single cell
+double Environment::getMaxActionValue(int i, int j)
+{
+	if(map[i][j].isTerminal() == true)
+	{
+		return map[i][j].getActionValue(4);
+	}
+	vector<int> movable;
+	for(int k = 0; k < 4;k++)
+	{
+		if(i != 0)
+		{
+			movable.push_back(3);
+		}
+		if(i != MAP_WIDTH -1)
+		{
+			movable.push_back(1);
+		}
+		if(j != 0)
+		{
+			movable.push_back(2);
+		}
+		if(j != MAP_HEIGHT-1)
+		{
+			movable.push_back(0);
+		}
+	}
+	double currentMax = map[i][j].getActionValue(movable[0]);
+	for(int k = 1; k < movable.size(); k++)
+	{
+		if(currentMax < map[i][j].getActionValue(movable[k]))
+		{
+			currentMax = map[i][j].getActionValue(movable[k]);
+		}
+	}
+	return currentMax;
 }

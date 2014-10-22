@@ -19,7 +19,6 @@ using namespace std;
 g++ -g -gdwarf-2 -O0 point.h cell.h environment.h environment.cpp agent.h agent.cpp main.cpp 
 */
 
-
 int main()
 {
 	Renderer* renderer1 = new Renderer();
